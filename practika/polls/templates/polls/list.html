@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Правила маршрутизации{% endblock %}
+
+{% block content %}
+    
+    <h2>Правила маршрутизации</h2>
+    
+    {% if rule_list %}
+    
+    
+        
+    <table class="table">
+        <thead>
+            <tr>
+                <th><form action="delete/" method="post" id="list-action">{% csrf_token %}<input type="submit" value="Удалить"></form></th> <!-- <a href="delete/">Удалить</a> -->
+                <th>Название</th>
+                <th>Очередь</th>
+                <th>Ранг</th>
+                <th><input type="checkbox" name=""></th>
+            </tr>
+        </thead>
+        {% for a in rule_list %}
+            <tr>
+                <td>
+                    <input type="checkbox"  value="{{a.id}}" name="checks">
+                    <label for="{{a.id}}"></label>
+                </td>
+                <td><input type="text" class="rule_name" name="name_{{a.id}}" value="{{a.name}}"/></td>
+                <td>
+                    <select class="rule_queue" name="queue_{{a.id}}">
+                    
+                    {% for i in Dictionaries.all_queues %}
+                        {% if i == a.queue %}
+                            <option selected value="{{i}}">{{i}}</option>
+                        {% else %}
+                            <option value="{{i}}">{{i}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                </td>
+                <td><input type="number" class="rule_range" name="rule_range_{{a.id}}" value="{{a.rule_range}}"/></td>
+                <td><input type="checkbox" name=""></td>                          <a href="{% url 'polls:detail' a.id %}">{{a.name}}</a>
+            </tr>
+            
+            {% endfor %}
+            <tr>
+                <td>
+                    <input type="checkbox"  class="custom-checkbox" id="new" name="new">
+                    <label for="new"></label>
+                </td>
+                <td><input type="text" class="rule_name"  name="name_new"/></td>
+                <td>
+                    <select class="rule_queue" name="queue_{{a.id}}">
+                    
+                    {% for i in Dictionaries.all_queues %}
+                        <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+                <td><input type="number" class="rule_range" name="rule_range_new"/></td>
+                <td><input type="checkbox" name=""></td> 
+            </tr>
+    </table>
+    
+    <input type="submit" value="Добавить">
+    <!-- </form> -->
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    var selected_items = [];
+    $(".checks").click(function(){
+        var selected_item = $(this).val();
+        var index = selected_items.indexOf(selected_item);
+        if(index == -1)
+        {
+           selected_items.push(selected_item);
+        }
+        else{
+           selected_items.splice(index, 1);
+        }
+    });
+    $("#del-selected").click(function(){
+        $.ajax({
+            url: '/delete/',
+            data: {'checkboxes': selected_items.join(","), 'csrfmiddlewaretoken': {{csrfmiddlewaretoken}} },
+            dataType: 'json',
+            type: 'post',
+            success: function (data) {
+            }
+        });
+    });
+})
+</script> -->
+
+    {% else %}
+    
+        Ничего нет
+    
+    {% endif %}
+
+{% endblock %}

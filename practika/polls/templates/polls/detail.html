@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{rule.name}}{% endblock %}
+
+{% block content %}
+
+    
+   <h2>{{rule.name}}</h2>
+   <p>{{rule.queue}}</p>
+   <p>{{rule.rule_range}}</p>
+   <p>{{rule.creator}}</p>
+   <em>{{rule.create_date}}</em>
+   <p>{{rule.updator}}</p>
+   <em>{{rule.update_date}}</em>
+
+{% endblock %}
