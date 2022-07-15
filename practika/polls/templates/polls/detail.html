@@ -4,13 +4,76 @@
 
 {% block content %}
 
-    
-   <h2>{{rule.name}}</h2>
-   <p>{{rule.queue}}</p>
-   <p>{{rule.rule_range}}</p>
-   <p>{{rule.creator}}</p>
-   <em>{{rule.create_date}}</em>
-   <p>{{rule.updator}}</p>
-   <em>{{rule.update_date}}</em>
+<h2>{{rule}}</h2>
 
+<table class="table">
+        <thead class="table-head">
+            <tr>
+                <th>
+                    <form action="delete/" method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="submit_button" value="Удалить">
+                    </form>
+                </th> 
+                <th>Тип</th>
+                <th>Атрибут</th>
+                <th>Оператор</th>
+                <th>Значение</th>
+                <th></th>
+            </tr>
+        </thead>
+<tbody>
+    {% if task %}
+    {% for t in task %}
+   <tr class="row">
+                <td class="checkbox_td">
+                    <input type="checkbox"  value="{{t.id}}" name="checks">
+                </td>
+                <td><p>{{t.operation_type}}</p></td>
+                <td><p>{{t.attribute}}</p></td>
+                <td><p>{{t.operator}}</p></td>
+                <td><p>{{t.value}}</p></td>
+                <td><a class="a_button" href="{% url 'polls:list_upd' t.id %}">Изменить</a></td>                       
+            </tr>
+   
+{% endfor %}
+{% endif %}
+<form action="add/" method="post">
+                {% csrf_token %}
+                <tr class="row">
+                    <td></td>
+                    <!-- <td><input type="text" class="rule_name"  name="name_new"/></td> -->
+                    <td>
+                        <select class="t_operation" name="operation_new">
+                        {% for i in Dictionaries.all_operations %}
+                            <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="t_attribute_new" name="attribute_new" onchange="location.href='?attribute='+value;">
+                        {% for i in Dictionaries.all_attributes %}
+                            <option value="{{i}}" {% if request.GET.attribute == i %} selected="selected" {% endif %} >{{i}}</option>
+                        {% endfor %}
+                        </select>
+                        
+                    </td>
+
+                    <td>
+                        <!-- <select class="t_operator" name="operator_new"> -->
+                            
+                        
+                        {% for key, value in Dictionaries.all_operators.items %}
+                            {{key}}:{{value}}
+                        {% endfor %}
+                        <!-- </select> -->
+                    </td>
+                    <td></td>
+                    <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  
+                </tr>
+            </form>
+    </table>
+
+
+</tbody>
 {% endblock %}
