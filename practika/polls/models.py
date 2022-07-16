@@ -48,11 +48,17 @@ class Dictionaries(models.Model):
                     'Тип действия': ('Update','Delete','Create')}
 
     def get_operators(attribute):
+        print("a:")
+        print(attribute)
         if Dictionaries.all_attributes[attribute] == 'Логический':
+            print("a")
             return ['=','!=']
         elif Dictionaries.all_attributes[attribute] == 'Справочник':
+            print("a3")
             return ['=','!=','in','not in']
-        else: return Dictionaries.all_operators
+        else:
+            print("a4") 
+            return Dictionaries.all_operators
 
     def get_values(attribute): 
         if attribute == 'Тип задания 1':

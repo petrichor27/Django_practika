@@ -47,10 +47,11 @@ def save_update(request, rule_id):
 
 def delete(request):
     try:
-        rule_del  = request.POST.getlist('checks')
-        print(rule_del)
-        for i in rule_del:
-            Rule.objects.filter(id=i).delete()
+        if request.method == "POST":
+            rule_del = request.POST.getlist('checks')
+            print(rule_del )
+            for i in rule_del:
+                Rule.objects.filter(id=i).delete()
         return HttpResponseRedirect("/polls/")
     except Rule.DoesNotExist:
         return Http404("Rule not found")

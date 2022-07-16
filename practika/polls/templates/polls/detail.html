@@ -59,14 +59,13 @@
                         
                     </td>
 
-                    <td>
-                        <!-- <select class="t_operator" name="operator_new"> -->
+                    <td>{{rule}}{% load choose_operators %}
+                        
+                            {% choose_operators request.GET.attribute as op %}
+                            
+                            {{op}}
                             
                         
-                        {% for key, value in Dictionaries.all_operators.items %}
-                            {{key}}:{{value}}
-                        {% endfor %}
-                        <!-- </select> -->
                     </td>
                     <td></td>
                     <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  

@@ -6,89 +6,50 @@
     
     <h2>Правила маршрутизации</h2>
     
-    {% if rule_list %}
-      
+    
     <table class="table">
-        <thead class="table-head">
-            <tr>
-                <th>
-                    <form action="delete/" method="post">
-                        {% csrf_token %}
-                        <input type="submit" class="submit_button" value="Удалить">
-                    </form>
-                </th> 
-                <th>Название</th>
-                <th>Очередь</th>
-                <th>Ранг</th>
-                <th></th>
-            </tr>
-        </thead>
-        {% for a in rule_list %}
+        <form action="delete/" method="post">
+            {% csrf_token %}
+            <thead class="table-head">
+                <tr>
+                    <th><input type="submit" class="submit_button" value="Удалить"></th> 
+                    <th>Название</th>
+                    <th>Очередь</th>
+                    <th>Ранг</th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% if rule_list %}
+                {% for a in rule_list %}
+                    <tr class="row">
+                        <td class="checkbox_td">
+                            <input type="checkbox"  value="{{a.id}}" name="checks">
+                            <label for="{{a.id}}"></label>
+                        </td>
+                        <td><a class="rule_ref" href="{% url 'polls:detail' a.id %}">{{a.name}}</a></td>
+                        <td><p>{{a.queue}}</p></td>
+                        <td><p>{{a.rule_range}}</p></td>
+                        <td><a class="a_button" href="{% url 'polls:list_upd' a.id %}">Изменить</a></td>                     
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </form>
+        <form action="add/" method="post">
+            {% csrf_token %}
             <tr class="row">
-                <td class="checkbox_td">
-                    <input type="checkbox"  value="{{a.id}}" name="checks">
-                    <label for="{{a.id}}"></label>
+                <td></td>
+                <td><input type="text" class="rule_name"  name="name_new"/></td>
+                <td>
+                    <select class="rule_queue" name="queue_new">
+                        {% for i in Dictionaries.all_queues %}
+                            <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
                 </td>
-                <td><a class="rule_ref" href="{% url 'polls:detail' a.id %}">{{a.name}}</a></td>
-                <td><p>{{a.queue}}</p></td>
-                <td><p>{{a.rule_range}}</p></td>
-                <td><a class="a_button" href="{% url 'polls:list_upd' a.id %}">Изменить</a></td> <!-- сделать кнопкой -->                       
+                <td><input type="number" class="rule_range" name="rule_range_new"/></td>
+                <td><input type="submit" class="submit_button" value="Сохранить"></td>  
             </tr>
-            {% endfor %}
-
-            <form action="add/" method="post">
-                {% csrf_token %}
-                <tr class="row">
-                    <td></td>
-                    <td><input type="text" class="rule_name"  name="name_new"/></td>
-                    <td>
-                        <select class="rule_queue" name="queue_new">
-                        {% for i in Dictionaries.all_queues %}
-                            <option value="{{i}}">{{i}}</option>
-                        {% endfor %}
-                        </select>
-                    </td>
-                    <td><input type="number" class="rule_range" name="rule_range_new"/></td>
-                    <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  
-                </tr>
-            </form>
-    </table>
-
-    {% else %}
-    
-        <table class="table">
-        <thead class="table-head">
-            <tr>
-                <th>
-                    <form action="delete/" method="post">
-                        {% csrf_token %}
-                        <input type="submit" class="submit_button" value="Удалить">
-                    </form>
-                </th> 
-                <th>Название</th>
-                <th>Очередь</th>
-                <th>Ранг</th>
-                <th></th>
-            </tr>
-        </thead>
-            <form action="add/" method="post">
-                {% csrf_token %}
-                <tr class="row">
-                    <td></td>
-                    <td><input type="text" class="rule_name"  name="name_new"/></td>
-                    <td>
-                        <select class="rule_queue" name="queue_new">
-                        {% for i in Dictionaries.all_queues %}
-                            <option value="{{i}}">{{i}}</option>
-                        {% endfor %}
-                        </select>
-                    </td>
-                    <td><input type="number" class="rule_range" name="rule_range_new"/></td>
-                    <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  
-                </tr>
-            </form>
-    </table>
-    
-    {% endif %}
+        </form>
+    </table>    
 
 {% endblock %}
