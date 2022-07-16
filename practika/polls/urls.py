@@ -7,7 +7,7 @@ app_name = 'polls'
 urlpatterns = [
     path('', views.index, name='index'),
     path('<int:rule_id>/', views.detail, name='detail'),
-    # path('<int:rule_id>/?attribute=', views.detail, name='detail'),
+    # path('sort/<slug:sort_type>/', views.sort, name='sort'),
     path('delete/', views.delete),
     path('add/', views.add),
     path('update/<int:rule_id>/', views.update, name='list_upd'),

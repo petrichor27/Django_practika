@@ -1,9 +1,13 @@
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Rule, Task, Dictionaries
 
 def index(request):
-    rule_list = Rule.objects.order_by('name')
+    sort_type = request.GET.get('sort', None)
+    if sort_type:
+        rule_list = Rule.objects.order_by(sort_type)
+    else:
+        rule_list = Rule.objects.all()
     return render(request,'polls/list.html', {'rule_list': rule_list, 'Dictionaries': Dictionaries})
 
 def detail(request, rule_id):
@@ -55,3 +59,4 @@ def delete(request):
         return HttpResponseRedirect("/polls/")
     except Rule.DoesNotExist:
         return Http404("Rule not found")
+

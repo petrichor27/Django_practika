@@ -53,7 +53,7 @@ class Dictionaries(models.Model):
         if Dictionaries.all_attributes[attribute] == 'Логический':
             print("a")
             return ['=','!=']
-        elif Dictionaries.all_attributes[attribute] == 'Справочник':
+        elif Dictionaries.all_attributes[attribute] == 'Число':
             print("a3")
             return ['=','!=','in','not in']
         else:

@@ -6,16 +6,18 @@
     
     <h2>Правила маршрутизации</h2>
     
-    
+    <!-- <p>Поиск по названию</p> -->
+    <!-- <input type="text" class="find"/> -->
+
     <table class="table">
         <form action="delete/" method="post">
             {% csrf_token %}
             <thead class="table-head">
                 <tr>
                     <th><input type="submit" class="submit_button" value="Удалить"></th> 
-                    <th>Название</th>
-                    <th>Очередь</th>
-                    <th>Ранг</th>
+                    <th onclick="location.href='?sort=name'">Название</th>
+                    <th onclick="location.href='?sort=queue'">Очередь</th>
+                    <th onclick="location.href='?sort=rule_range'">Ранг</th>
                     <th></th>
                 </tr>
             </thead>
@@ -38,7 +40,7 @@
             {% csrf_token %}
             <tr class="row">
                 <td></td>
-                <td><input type="text" class="rule_name"  name="name_new"/></td>
+                <td><input type="text" class="rule_name" name="name_new"/></td>
                 <td>
                     <select class="rule_queue" name="queue_new">
                         {% for i in Dictionaries.all_queues %}
