@@ -16,7 +16,7 @@ class Value_for_type123(models.Model):
     def get_type1_list(self):
         type1 = []
         for i in self.values_list:
-            if not i[0] in type1:
+            if not i[0] in type1 and i[0]!='Выберите':
                 type1.append(i[0])
         return type1
 

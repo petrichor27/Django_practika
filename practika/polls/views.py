@@ -84,3 +84,7 @@ def delete2(request,rule_id):
         return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
     except Rule.DoesNotExist:
         return Http404("Rule not found")
+
+
+def back(request,rule_id):
+    return HttpResponseRedirect("/polls/")

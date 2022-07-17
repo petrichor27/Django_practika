@@ -14,7 +14,7 @@
                 <th>
                     <form action="delete/" method="post">
                         {% csrf_token %}
-                        <input type="submit" class="buttons" value="Удалить">
+                        <input type="submit" class="submit_button" value="Удалить">
                     </form>
                 </th> 
                 <th>Название</th>
@@ -43,9 +43,9 @@
                         <input type="checkbox"  value="{{a.id}}" name="checks">
                         <label for="{{a.id}}"></label>
                     </td>
-                    <td><input type="text" class="rule_name" name="name" value="{{a.name}}"/></td>
+                    <td><input type="text" class="inp_rule_name" name="name" value="{{a.name}}"/></td>
                     <td>
-                        <select class="rule_queue" name="queue">
+                        <select class="sel_rule_queue" name="queue">
                         {% for i in Dictionaries.all_queues %}
                             {% if i == a.queue %}
                                 <option selected value="{{i}}">{{i}}</option>
@@ -55,7 +55,7 @@
                         {% endfor %}
                         </select>
                     </td>
-                    <td><input type="number" class="rule_range" name="rule_range" value="{{a.rule_range}}"/></td>
+                    <td><input type="number" class="inp_rule_range" name="rule_range" value="{{a.rule_range}}"/></td>
                     <td><input type="submit" class="submit_button" value="Сохранить"></td>     
                 </form>                     
             </tr>
@@ -63,15 +63,15 @@
             {% endfor %}
             <tr class="row">
                 <td></td>
-                <td><input type="text" class="rule_name"  name="name_new"/></td>
+                <td><input type="text" class="inp_rule_name"  name="name_new"/></td>
                 <td>
-                    <select class="rule_queue" name="queue_new">
+                    <select class="sel_rule_queue" name="queue_new">
                     {% for i in Dictionaries.all_queues %}
                         <option value="{{i}}">{{i}}</option>
                     {% endfor %}
                     </select>
                 </td>
-                <td><input type="number" class="rule_range" name="rule_range_new"/></td>
+                <td><input type="number" class="inp_rule_range" name="rule_range_new"/></td>
                 <td></td> 
             </tr>
     </table>
@@ -97,15 +97,15 @@
                 {% csrf_token %}
                 <tr class="row">
                     <td></td>
-                    <td><input type="text" class="rule_name"  name="name_new"/></td>
+                    <td><input type="text" class="inp_rule_name"  name="name_new"/></td>
                     <td>
-                        <select class="rule_queue" name="queue_new">
+                        <select class="sel_rule_queue" name="queue_new">
                         {% for i in Dictionaries.all_queues %}
                             <option value="{{i}}">{{i}}</option>
                         {% endfor %}
                         </select>
                     </td>
-                    <td><input type="number" class="rule_range" name="rule_range_new"/></td>
+                    <td><input type="number" class="inp_rule_range" name="rule_range_new"/></td>
                     <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  
                 </tr>
             </form>

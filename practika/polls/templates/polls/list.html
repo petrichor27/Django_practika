@@ -12,6 +12,7 @@
     <table class="table">
         <form action="delete/" method="post">
             {% csrf_token %}
+
             <thead class="table-head">
                 <tr>
                     <th><input type="submit" class="submit_button" value="Удалить"></th> 
@@ -21,8 +22,10 @@
                     <th></th>
                 </tr>
             </thead>
+
             {% if rule_list %}
                 {% for a in rule_list %}
+                {% block update %}
                     <tr class="row">
                         <td class="checkbox_td">
                             <input type="checkbox"  value="{{a.id}}" name="checks">
@@ -33,22 +36,24 @@
                         <td><p>{{a.rule_range}}</p></td>
                         <td><a class="a_button" href="{% url 'polls:list_upd' a.id %}">Изменить</a></td>                     
                     </tr>
+                    {% endblock %}
                 {% endfor %}
             {% endif %}
-        </form>
+        </form>      
+        
         <form action="add/" method="post">
             {% csrf_token %}
             <tr class="row">
                 <td></td>
-                <td><input type="text" class="rule_name" name="name_new"/></td>
+                <td><input type="text" class="inp_rule_name" name="name_new"/></td>
                 <td>
-                    <select class="rule_queue" name="queue_new">
+                    <select class="sel_rule_queue" name="queue_new">
                         {% for i in Dictionaries.all_queues %}
                             <option value="{{i}}">{{i}}</option>
                         {% endfor %}
                     </select>
                 </td>
-                <td><input type="number" class="rule_range" name="rule_range_new"/></td>
+                <td><input type="number" class="inp_rule_range" name="rule_range_new"/></td>
                 <td><input type="submit" class="submit_button" value="Сохранить"></td>  
             </tr>
         </form>

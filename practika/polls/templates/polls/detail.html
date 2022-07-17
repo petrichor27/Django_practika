@@ -3,7 +3,7 @@
 {% block title %}{{rule.name}}{% endblock %}
 
 {% block content %}
-{% load choose_operators %}
+
 <h2>{{rule}}</h2>
 
 <table class="table">
@@ -46,7 +46,7 @@
                     <td></td>
                     <!-- <td><input type="text" class="rule_name"  name="name_new"/></td> -->
                     <td>
-                        <select class="t_operation" name="operation_new">
+                        <select id="t_operation" name="operation_new">
                         {% for i in Dictionaries.all_operations %}
                             <option value="{{i}}">{{i}}</option>
                         {% endfor %}
@@ -96,7 +96,9 @@
                 </tr>
             </form>
     </table>
-
-
+    <br><br>
+    <form action="back/">
+<input type="submit" class="submit_button" id="back" value="Назад">
+</form>
 <!-- </tbody> -->
 {% endblock %}
