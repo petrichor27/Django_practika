@@ -4,6 +4,7 @@ import csv
 class Value_for_type123(models.Model):
     def __init__(self):
         self.values_list = []
+        self.read_types('C:\\Users\\Елизавета\\Documents\\GitHub\\Django_practika\\practika\\polls\\Типы заданий.csv')
 
     def read_types(self,file):  
         with open(file, newline='') as csvfile:
@@ -13,7 +14,6 @@ class Value_for_type123(models.Model):
         self.values_list.pop(0)
         
     def get_type1_list(self):
-        self.read_types('Типы заданий.csv')
         type1 = []
         for i in self.values_list:
             if not i[0] in type1:
@@ -23,14 +23,14 @@ class Value_for_type123(models.Model):
     def get_type2_list(self, type1):
         type2 = []
         for i in self.values_list:
-            if i[0] == type1:
+            if i[0] == type1 and i[1] not in type2 and i[1]!='Выберите':
                 type2.append(i[1])
         return type2
 
     def get_type3_list(self, type1, type2):
         type3 = []
         for i in self.values_list:
-            if i[0] == type1 and i[1] == type2:
+            if i[0] == type1 and i[1] == type2 and i[2] not in type2 and i[2]!='Выберите':
                 type3.append(i[2])
         return type3
 
@@ -48,34 +48,37 @@ class Dictionaries(models.Model):
                     'Тип действия': ('Update','Delete','Create')}
 
     def get_operators(attribute):
-        print("a:")
-        print(attribute)
         if Dictionaries.all_attributes[attribute] == 'Логический':
-            print("a")
             return ['=','!=']
         elif Dictionaries.all_attributes[attribute] == 'Число':
-            print("a3")
             return ['=','!=','in','not in']
         else:
-            print("a4") 
             return Dictionaries.all_operators
 
-    def get_values(attribute): 
-        if attribute == 'Тип задания 1':
-            return Value_for_type123.get_type1_list()
-        elif attribute in Dictionaries.all_values.keys():
-                return list(Dictionaries.all_values[attribute])
-        elif Dictionaries.all_attributes[attribute] == 'Логический':
+    def get_values(attribute_name,attribute1,attribute2): 
+        val_list = Value_for_type123()
+        if attribute_name == 'Тип задания 3':
+            if attribute2:
+                return val_list.get_type3_list(attribute1,attribute2)
+
+            elif attribute1:
+                return val_list.get_type2_list(attribute1)
+
+            else:
+                return val_list.get_type1_list()
+        elif attribute_name == 'Тип задания 2':
+            if attribute1:
+                return val_list.get_type2_list(attribute1)
+
+            else:
+                return val_list.get_type1_list()
+        elif attribute_name == 'Тип задания 1':
+                return val_list.get_type1_list()
+        elif attribute_name in Dictionaries.all_values.keys():
+                return list(Dictionaries.all_values[attribute_name])
+        elif Dictionaries.all_attributes[attribute_name] == 'Логический':
             return ['Да','Нет']
         else: return None
-
-    def get_values(attribute_name,attribute1):
-        if attribute_name == 'Тип задания 2':
-            return Value_for_type123.get_type2_list(attribute1)
-
-    def get_values(attribute_name,attribute1,attribute2):
-        if attribute_name == 'Тип задания 3':
-            return Value_for_type123.get_type3_list(attribute1,attribute2)
 
 
 class Rule(models.Model):

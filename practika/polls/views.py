@@ -12,15 +12,20 @@ def index(request):
 
 def detail(request, rule_id):
     try:
-        a = Rule.objects.get(id = rule_id)
-        t = Task.objects.filter(rule = a)
-        for i in t:
-            print(i.value)
-        # t1 = Task.objects.get.all()
-        
+        rule = Rule.objects.get(id = rule_id)
+        task = Task.objects.filter(rule = rule)
+        attribute =  request.GET.get('attribute', None)
+        type1_attribute = None
+        type2_attribute = None
+        for i in task:
+            if i.attribute == 'Тип задания 1':
+                type1_attribute = i.value
+            elif i.attribute == 'Тип задания 2':
+                type2_attribute = i.value
     except:
         raise Http404("Правило не найдено")
-    return render(request, 'polls/detail.html', {'rule': a.name, 'task': t, 'Dictionaries': Dictionaries})
+    return render(request, 'polls/detail.html', {'rule': rule.name, 'task': task, 'Dictionaries': Dictionaries, 
+                                                'attribute_temp':attribute, 'type1': type1_attribute, 'type2':type2_attribute})
 
 def add(request):
     if request.method == "POST":
@@ -32,6 +37,17 @@ def add(request):
         rule.updator = 'admin'
         rule.save()
     return HttpResponseRedirect("/polls/")
+
+def add2(request, rule_id):
+    if request.method == "POST":
+        task = Task()
+        task.rule = Rule.objects.get(id = rule_id)
+        task.operation_type = request.POST.get("operation_new")
+        task.attribute = request.POST.get("attribute_new")
+        task.operator = request.POST.get("operator_new")
+        task.value = request.POST.get("value_new")
+        task.save()
+    return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
 
 def update(request, rule_id):
     rule_list = Rule.objects.order_by('name')
@@ -53,10 +69,18 @@ def delete(request):
     try:
         if request.method == "POST":
             rule_del = request.POST.getlist('checks')
-            print(rule_del )
             for i in rule_del:
                 Rule.objects.filter(id=i).delete()
         return HttpResponseRedirect("/polls/")
     except Rule.DoesNotExist:
         return Http404("Rule not found")
 
+def delete2(request,rule_id):
+    try:
+        if request.method == "POST":
+            task_del = request.POST.getlist('checks')
+            for i in task_del:
+                Task.objects.filter(id=i).delete()
+        return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
+    except Rule.DoesNotExist:
+        return Http404("Rule not found")

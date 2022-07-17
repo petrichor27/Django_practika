@@ -53,6 +53,8 @@ select {
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     height: 1.8rem;
+    width: 60%;
+    text-align: center;
 }
 
 .submit_button {
@@ -143,3 +145,4 @@ font-family: inherit; /* 1 */
     background: #fff;
     height: 70px;
 }
+

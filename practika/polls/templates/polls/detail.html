@@ -3,17 +3,18 @@
 {% block title %}{{rule.name}}{% endblock %}
 
 {% block content %}
-
+{% load choose_operators %}
 <h2>{{rule}}</h2>
 
 <table class="table">
+    <form action="delete/" method="post">
+                        {% csrf_token %}
         <thead class="table-head">
             <tr>
                 <th>
-                    <form action="delete/" method="post">
-                        {% csrf_token %}
+                    
                         <input type="submit" class="submit_button" value="Удалить">
-                    </form>
+                    
                 </th> 
                 <th>Тип</th>
                 <th>Атрибут</th>
@@ -22,7 +23,7 @@
                 <th></th>
             </tr>
         </thead>
-<tbody>
+<!-- <tbody> -->
     {% if task %}
     {% for t in task %}
    <tr class="row">
@@ -38,6 +39,7 @@
    
 {% endfor %}
 {% endif %}
+</form>
 <form action="add/" method="post">
                 {% csrf_token %}
                 <tr class="row">
@@ -52,27 +54,49 @@
                     </td>
                     <td>
                         <select id="t_attribute_new" name="attribute_new" onchange="location.href='?attribute='+value;">
-                        {% for i in Dictionaries.all_attributes %}
-                            <option value="{{i}}" {% if request.GET.attribute == i %} selected="selected" {% endif %} >{{i}}</option>
-                        {% endfor %}
+                            <option value="">Не выбрано</option>
+                            {% for i in Dictionaries.all_attributes %}
+
+                            {% check_attribute i type1 type2 as check_attr %}
+                            {% if check_attr %}
+                                    <option value="{{i}}" {% if request.GET.attribute == i %} selected="selected" {% endif %} >{{i}}</option>
+                                {% endif %} 
+                            {% endfor %}
                         </select>
                         
                     </td>
 
-                    <td>{{rule}}{% load choose_operators %}
+                    <td>
+                        <select id="t_operator_new" name="operator_new">
+                            <option value="">Не выбрано</option>
+                        {% if attribute_temp %}
                         
-                            {% choose_operators request.GET.attribute as op %}
-                            
-                            {{op}}
-                            
+                                {% choose_operators attribute_temp as op %}
+                            {% for i in op %}
+                                <option value="{{i}}">{{i}}</option>
+                            {% endfor %}
+                        {% endif %} 
+                           </select> 
                         
                     </td>
-                    <td></td>
+                    <td>
+                        <select id="t_value_new" name="value_new">
+                            <option value="">Не выбрано</option>
+                        {% if attribute_temp %}
+                            
+                        
+                            {% choose_values attribute_temp type1 type2 as val %}
+                            {% for i in val %}
+                                <option value="{{i}}">{{i}}</option>
+                            {% endfor %}
+                        {% endif %} 
+                           </select> 
+                    </td>
                     <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  
                 </tr>
             </form>
     </table>
 
 
-</tbody>
+<!-- </tbody> -->
 {% endblock %}
