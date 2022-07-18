@@ -27,3 +27,11 @@ def check_attribute(arg, type1, type2):
     if arg == 'Тип задания 2' and type1 or arg == 'Тип задания 3' and type1 and type2 or arg != 'Тип задания 2' and arg != 'Тип задания 3':
         return True
     return False
+
+@register.simple_tag()
+def check_list(arg):
+    if type(arg) == list:
+        print('t')
+        return True
+    print('f')
+    return False

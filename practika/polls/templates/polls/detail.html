@@ -1,104 +1,102 @@
 {% extends 'base.html' %}
 
-{% block title %}{{rule.name}}{% endblock %}
+{% block title %}{{rule}}{% endblock %}
 
 {% block content %}
+    {% load choose_operators %}
 
-<h2>{{rule}}</h2>
+    <h2>{{rule}}</h2>
 
-<table class="table">
-    <form action="delete/" method="post">
-                        {% csrf_token %}
-        <thead class="table-head">
-            <tr>
-                <th>
-                    
-                        <input type="submit" class="submit_button" value="Удалить">
-                    
-                </th> 
-                <th>Тип</th>
-                <th>Атрибут</th>
-                <th>Оператор</th>
-                <th>Значение</th>
-                <th></th>
-            </tr>
-        </thead>
-<!-- <tbody> -->
-    {% if task %}
-    {% for t in task %}
-   <tr class="row">
-                <td class="checkbox_td">
-                    <input type="checkbox"  value="{{t.id}}" name="checks">
-                </td>
-                <td><p>{{t.operation_type}}</p></td>
-                <td><p>{{t.attribute}}</p></td>
-                <td><p>{{t.operator}}</p></td>
-                <td><p>{{t.value}}</p></td>
-                <td><a class="a_button" href="{% url 'polls:list_upd' t.id %}">Изменить</a></td>                       
-            </tr>
-   
-{% endfor %}
-{% endif %}
-</form>
-<form action="add/" method="post">
-                {% csrf_token %}
-                <tr class="row">
-                    <td></td>
-                    <!-- <td><input type="text" class="rule_name"  name="name_new"/></td> -->
-                    <td>
-                        <select id="t_operation" name="operation_new">
+    <table class="table">
+        <form action="delete/" method="post">
+            {% csrf_token %}
+            <thead class="table-head">
+                <tr>
+                    <th><input type="submit" class="submit_button" value="Удалить"></th> 
+                    <th onclick="location.href='?sort=operation_type'">Тип</th>
+                    <th onclick="location.href='?sort=attribute'">Атрибут</th>
+                    <th onclick="location.href='?sort=operator'">Оператор</th>
+                    <th>Значение</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            {% if task %}
+                {% for t in task %}
+                    <tr class="row">
+                        <td><input type="checkbox"  value="{{t.id}}" name="checks"></td>
+                        <td><p>{{t.operation_type}}</p></td>
+                        <td><p>{{t.attribute}}</p></td>
+                        <td><p>{{t.operator}}</p></td>
+                        <td>
+                            
+                            <p>{{t.value}}</p>
+                            
+                        </td>
+                            
+                        <td><a class="a_button" href="update/{{t.id}}">Изменить</a></td>                       
+                    </tr>
+       
+                {% endfor %}
+            {% endif %}
+        </form>
+        <form action="add/" method="post">
+            {% csrf_token %}
+            <tr class="row">
+                <td></td>
+                <td>
+                    <select id="t_operation" name="operation_new" onchange="location.href='?new='+value+',';">
+                        <option value="">Не выбрано</option>
                         {% for i in Dictionaries.all_operations %}
-                            <option value="{{i}}">{{i}}</option>
+                            <option value="{{i}}" {% if new_t_op == i %} selected="selected" {% endif %}>{{i}}</option>
                         {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <select id="t_attribute_new" name="attribute_new" onchange="location.href='?attribute='+value;">
-                            <option value="">Не выбрано</option>
-                            {% for i in Dictionaries.all_attributes %}
-
+                    </select>
+                </td>
+                <td>
+                    <select id="t_attribute_new" name="attribute_new" onchange="location.href=location.href+value+',';">
+                        <option value="">Не выбрано</option>
+                        {% for i in Dictionaries.all_attributes %}
                             {% check_attribute i type1 type2 as check_attr %}
                             {% if check_attr %}
-                                    <option value="{{i}}" {% if request.GET.attribute == i %} selected="selected" {% endif %} >{{i}}</option>
-                                {% endif %} 
-                            {% endfor %}
-                        </select>
-                        
-                    </td>
-
-                    <td>
-                        <select id="t_operator_new" name="operator_new">
-                            <option value="">Не выбрано</option>
+                                <option value="{{i}}" {% if attribute_temp == i %} selected="selected" {% endif %} >{{i}}</option>
+                            {% endif %} 
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select id="t_operator_new" name="operator_new" onchange="location.href=location.href+value+',';">
+                        <option value="">Не выбрано</option>
                         {% if attribute_temp %}
-                        
-                                {% choose_operators attribute_temp as op %}
+                            {% choose_operators attribute_temp as op %}
                             {% for i in op %}
-                                <option value="{{i}}">{{i}}</option>
+                            
+                                <option value="{{i}}" {% if new_op == i %} selected="selected" {% endif %}>{{i}}</option>
+                            
                             {% endfor %}
                         {% endif %} 
-                           </select> 
-                        
-                    </td>
-                    <td>
-                        <select id="t_value_new" name="value_new">
-                            <option value="">Не выбрано</option>
+                   </select> 
+                </td>
+                <td>
+                    <select id="t_value_new" name="value_new" {% if new_op == 'in' or new_op == 'not in' %} multiple size=3 {% endif %} >
+                        <option value="">Не выбрано</option>
                         {% if attribute_temp %}
-                            
-                        
                             {% choose_values attribute_temp type1 type2 as val %}
                             {% for i in val %}
                                 <option value="{{i}}">{{i}}</option>
                             {% endfor %}
                         {% endif %} 
-                           </select> 
-                    </td>
-                    <td><input type="submit" class="submit_button" value="Сохранить"></td> <!-- сделать кнопкой -->  
-                </tr>
-            </form>
+                    </select> 
+                    
+                </td>
+                <td><input type="submit" class="submit_button" value="Сохранить"></td>
+            </tr>
+        </form>
     </table>
     <br><br>
+    <div class="back">
     <form action="back/">
-<input type="submit" class="submit_button" id="back" value="Назад">
-</form>
-<!-- </tbody> -->
+        <input type="submit" class="submit_button" class="back" value="Назад">
+    </form>
+</div>
+
 {% endblock %}

@@ -5,10 +5,18 @@
 {% block content %}
     
     <h2>Правила маршрутизации</h2>
-    
-    <!-- <p>Поиск по названию</p> -->
-    <!-- <input type="text" class="find"/> -->
 
+    <!-- <div class='search'>
+        <select class="sel_search" onchange="location.href='?search='+value;">
+            <option value="">Не искать</option>
+            <option value="name" {% if request.GET.search == "name" %} selected="selected" {% endif %}>Поиск по названию</option>
+            <option value="queue" {% if request.GET.search == "queue" %} selected="selected" {% endif %}>Поиск по очереди</option>
+        </select>
+        <p>&emsp;&emsp;</p> 
+        <input type="text" class="inp_search" onchange="location.href=location.href+','+value;"/>
+
+    </div> -->
+    
     <table class="table">
         <form action="delete/" method="post">
             {% csrf_token %}
@@ -25,18 +33,13 @@
 
             {% if rule_list %}
                 {% for a in rule_list %}
-                {% block update %}
                     <tr class="row">
-                        <td class="checkbox_td">
-                            <input type="checkbox"  value="{{a.id}}" name="checks">
-                            <label for="{{a.id}}"></label>
-                        </td>
+                        <td><input type="checkbox"  value="{{a.id}}" name="checks"></td>
                         <td><a class="rule_ref" href="{% url 'polls:detail' a.id %}">{{a.name}}</a></td>
                         <td><p>{{a.queue}}</p></td>
                         <td><p>{{a.rule_range}}</p></td>
                         <td><a class="a_button" href="{% url 'polls:list_upd' a.id %}">Изменить</a></td>                     
                     </tr>
-                    {% endblock %}
                 {% endfor %}
             {% endif %}
         </form>      

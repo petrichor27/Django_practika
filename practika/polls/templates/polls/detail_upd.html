@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}{{rule}}{% endblock %}
+
+{% block content %}
+    {% load choose_operators %}
+
+    <h2>{{rule}}</h2>
+
+    <table class="table">
+        
+            <thead class="table-head">
+                <tr>
+                    <th><input type="submit" class="submit_button hide" value="Удалить"></th> 
+                    <th>Тип</th>
+                    <th>Атрибут</th>
+                    <th>Оператор</th>
+                    <th>Значение</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            {% if task %}
+                {% for t in task %}
+                    {% if t.id != id_to_update %}
+                        <tr class="row">
+                            <td><input type="checkbox"  value="{{t.id}}" name="checks"></td>
+                            <td><p>{{t.operation_type}}</p></td>
+                            <td><p>{{t.attribute}}</p></td>
+                            <td><p>{{t.operator}}</p></td>
+                            <td><p>{{t.value}}</p></td>
+                            <td><a class="a_button" href="update/{{t.id}}">Изменить</a></td>                       
+                        </tr>
+                    {% else %}
+                        <tr class="row">
+                            <form action="save/" method="post">
+                            {% csrf_token %}
+                            <td><input type="checkbox" value="{{t.id}}" name="checks"></td>
+                            <td>
+                                <select class="sel_t_operation" name="operation">
+                                    {% for i in Dictionaries.all_operations %}
+                                        {% if i == t.operation_type %}
+                                            <option selected value="{{i}}">{{i}}</option>
+                                        {% else %}
+                                            <option value="{{i}}">{{i}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="sel_t_attribute" name="attribute" onchange="location.href='?attribute='+value;">
+                                    {% for i in Dictionaries.all_attributes %}
+                                        {% check_attribute i type1 type2 as check_attr %}
+                                        {% if check_attr %}
+                                            
+                                            <option value="{{i}}" {% if attribute_temp == i %} selected="selected" {% endif %} >{{i}}</option>
+                                            
+
+                                        {% endif %} 
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="sel_t_operator" name="operator">
+                                    {% if attribute_temp %}
+                                        {% choose_operators attribute_temp as op %}
+                                        {% for i in op %}
+                                        {% if i == t.operator %}
+                                            <option selected value="{{i}}">{{i}}</option>
+                                            {% else %}
+                                            <option value="{{i}}">{{i}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %} 
+                                </select>
+                            </td>
+                            <td>
+                                <select id="sel_t_value" name="value">
+                                    {% if attribute_temp %}
+                                        {% choose_values attribute_temp type1 type2 as val %}
+                                        {% for i in val %}
+                                            {% if i == t.value %}
+                                                <option selected value="{{i}}">{{i}}</option>
+                                            {% else %}
+                                                <option value="{{i}}">{{i}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %} 
+                                </select>
+                            </td>
+                            <td><input type="submit" class="submit_button" value="Сохранить"></td>
+                        </form>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+    
+    </table>
+    <br><br>
+    <div class="back">
+    <form action="back/">
+        <input type="submit" class="submit_button" class="back" value="Отмена">
+    </form>
+</div>
+{% endblock %}

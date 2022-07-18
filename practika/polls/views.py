@@ -3,6 +3,21 @@ from django.shortcuts import render, redirect
 from .models import Rule, Task, Dictionaries
 
 def index(request):
+    # search = request.GET.get('search', None)
+    # if search:
+    #     search, value = search.split(',')
+    #     print(search)
+    #     print(value.lower())
+    #     try:
+    #         if search == 'name':
+    #             rule = Rule.objects.get(name = value)
+    #         elif search == 'queue':
+    #             rule = Rule.objects.get(queue = value)
+    #         return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries})
+    #     except:
+    #         raise Http404("Правило не найдено")
+
+  
     sort_type = request.GET.get('sort', None)
     if sort_type:
         rule_list = Rule.objects.order_by(sort_type)
@@ -14,7 +29,29 @@ def detail(request, rule_id):
     try:
         rule = Rule.objects.get(id = rule_id)
         task = Task.objects.filter(rule = rule)
-        attribute =  request.GET.get('attribute', None)
+
+        sort_type = request.GET.get('sort', None)
+        if sort_type:
+            task = Task.objects.order_by(sort_type)
+        else:
+            task = Task.objects.all()
+
+        new_t = request.GET.get('new', None)
+        new_attr = None
+        new_op = None
+        new_t_op = None
+        if new_t:
+            new_t = new_t[:-1]
+            
+            if ',' in new_t:
+                new_t_op = new_t.split(',')
+                if len(new_t_op)>1:
+                    new_attr = new_t_op[1]
+                if len(new_t_op)>2:
+                    new_op = new_t_op[2]
+                new_t_op = new_t_op[0]
+            else:
+                new_t_op = new_t
         type1_attribute = None
         type2_attribute = None
         for i in task:
@@ -22,10 +59,12 @@ def detail(request, rule_id):
                 type1_attribute = i.value
             elif i.attribute == 'Тип задания 2':
                 type2_attribute = i.value
+
     except:
         raise Http404("Правило не найдено")
     return render(request, 'polls/detail.html', {'rule': rule.name, 'task': task, 'Dictionaries': Dictionaries, 
-                                                'attribute_temp':attribute, 'type1': type1_attribute, 'type2':type2_attribute})
+                                                'attribute_temp': new_attr, 'type1': type1_attribute, 
+                                                'type2':type2_attribute, 'new_op': new_op, 'new_t_op': new_t_op})
 
 def add(request):
     if request.method == "POST":
@@ -45,12 +84,12 @@ def add2(request, rule_id):
         task.operation_type = request.POST.get("operation_new")
         task.attribute = request.POST.get("attribute_new")
         task.operator = request.POST.get("operator_new")
-        task.value = request.POST.get("value_new")
+        task.value = request.POST.getlist("value_new")
         task.save()
     return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
 
 def update(request, rule_id):
-    rule_list = Rule.objects.order_by('name')
+    rule_list = Rule.objects.all()
     return render(request,'polls/list_upd.html', {'rule_list': rule_list, 'Dictionaries': Dictionaries, 'id_to_update': rule_id})
     
 def save_update(request, rule_id):  
@@ -64,6 +103,35 @@ def save_update(request, rule_id):
         rule.save()
     rule_list = Rule.objects.order_by('name')
     return HttpResponseRedirect("/polls/")
+
+def update2(request, rule_id, task_id):
+    rule = Rule.objects.get(id = rule_id)
+    task = Task.objects.filter(rule = rule)
+    upd_task = Task.objects.filter(id = task_id)
+
+    type1_attribute = None
+    type2_attribute = None
+    for i in task:
+        if i.attribute == 'Тип задания 1':
+            type1_attribute = i.value
+        elif i.attribute == 'Тип задания 2':
+            type2_attribute = i.value
+    attribute2 = request.GET.get('attribute', upd_task[0].attribute)
+    # print()
+    return render(request,'polls/detail_upd.html', {'rule': rule.name, 'task': task, 'Dictionaries': Dictionaries, 'attribute_temp': attribute2, 
+                                                'type1': type1_attribute, 'type2': type2_attribute, 'id_to_update': task_id})
+    
+def save_update2(request, rule_id, task_id):  
+    task = Task.objects.get(id = task_id)
+    if request.method == "POST":
+        task.operation_type = request.POST.get("operation")
+        task.attribute = request.POST.get("attribute")
+        task.operator = request.POST.get("operator")
+        task.value = request.POST.get("value")
+        task.save()
+    # rule_list = Rule.objects.order_by('name')
+    return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
+
 
 def delete(request):
     try:
@@ -88,3 +156,6 @@ def delete2(request,rule_id):
 
 def back(request,rule_id):
     return HttpResponseRedirect("/polls/")
+
+def back2(request,rule_id,task_id):
+    return HttpResponseRedirect("/polls/"+str(rule_id)+"/")

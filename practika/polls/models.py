@@ -23,14 +23,14 @@ class Value_for_type123(models.Model):
     def get_type2_list(self, type1):
         type2 = []
         for i in self.values_list:
-            if i[0] == type1 and i[1] not in type2 and i[1]!='Выберите':
+            if i[0] in type1 and i[1] not in type2 and i[1]!='Выберите':
                 type2.append(i[1])
         return type2
 
     def get_type3_list(self, type1, type2):
         type3 = []
         for i in self.values_list:
-            if i[0] == type1 and i[1] == type2 and i[2] not in type2 and i[2]!='Выберите':
+            if i[0] in type1 and i[1] in type2 and i[2] not in type2 and i[2]!='Выберите':
                 type3.append(i[2])
         return type3
 
@@ -45,7 +45,7 @@ class Dictionaries(models.Model):
     all_values = {'Тип клиента': ('Юридическое лицо', 'Физическое лицо'),
                     'Статус': ('Открыто', 'В работе', 'Создан наряд во внешней системе', 'Отклонен', 'Завершен'),
                     'Предпочитаемый способ связи': ('SMS', 'Звонок', 'Email', 'Письмо', 'Информирование не требуется'),
-                    'Тип действия': ('Update','Delete','Create')}
+                    'Тип действия': ('And',)}
 
     def get_operators(attribute):
         if Dictionaries.all_attributes[attribute] == 'Логический':
