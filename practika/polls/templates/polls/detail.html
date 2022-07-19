@@ -76,16 +76,21 @@
                    </select> 
                 </td>
                 <td>
+                    {% if attribute_temp %}
+                            {% choose_values attribute_temp type1 type2 as val %}
+                            {% if val and new_op != 'like' and new_op != 'not like' %}
                     <select class="sel_t_value" name="value_new" {% if new_op == 'in' or new_op == 'not in' %} multiple size=3 {% endif %} >
                         <option value="">Не выбрано</option>
-                        {% if attribute_temp %}
-                            {% choose_values attribute_temp type1 type2 as val %}
+                        
                             {% for i in val %}
                                 <option value="{{i}}">{{i}}</option>
                             {% endfor %}
-                        {% endif %} 
+                            
                     </select> 
-                    
+                    {% else %}
+                            <input type="text" class="inp_rule_name" name="value_new"/>
+                            {% endif %}
+                        {% endif %} 
                 </td>
                 <td><input type="submit" class="submit_button" value="Сохранить"></td>
             </tr>

@@ -46,8 +46,7 @@ def make_values_list(arg):
         t = ''
         for i in range(len(arg1)):
             if arg1[i] != ',':
-                if arg1[i] != ' ':
-                    t += arg1[i]
+                t += arg1[i]
             else:
                 res.append(t)
                 t = ''
