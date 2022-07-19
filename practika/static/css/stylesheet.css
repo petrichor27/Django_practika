@@ -51,12 +51,8 @@ select {
     border: 1px solid #bdbdbd;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    /*height: 1.8rem;*/
     width: 60%;
     min-height: 1.8rem;
-}
-.sel_t_value {
-    /*height: 3.8rem;*/
 }
 .submit_button {
     font-family: inherit;
@@ -117,10 +113,9 @@ select {
     padding-left: 3%;
     display: flex;
     flex-direction: row;
-
-    /*width: 60%;*/
 }
 .sel_search {
     width: 15%;
     text-align: center;
+    height: 1.8rem;
 }

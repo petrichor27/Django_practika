@@ -6,7 +6,7 @@
     
     <h2>Правила маршрутизации</h2>
 
-    <!-- <div class='search'>
+    <div class='search'>
         <select class="sel_search" onchange="location.href='?search='+value;">
             <option value="">Не искать</option>
             <option value="name" {% if request.GET.search == "name" %} selected="selected" {% endif %}>Поиск по названию</option>
@@ -14,13 +14,11 @@
         </select>
         <p>&emsp;&emsp;</p> 
         <input type="text" class="inp_search" onchange="location.href=location.href+','+value;"/>
-
-    </div> -->
+    </div>
     
     <table class="table">
         <form action="delete/" method="post">
             {% csrf_token %}
-
             <thead class="table-head">
                 <tr>
                     <th><input type="submit" class="submit_button" value="Удалить"></th> 
@@ -61,5 +59,12 @@
             </tr>
         </form>
     </table>    
-
+    {% if search %}
+     <br><br>
+        <div class="back">
+            <form action="back/">
+                <input type="submit" class="submit_button" class="back" value="На главную">
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}

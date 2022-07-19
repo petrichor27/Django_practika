@@ -39,63 +39,63 @@
                     {% else %}
                         <tr class="row">
                             <form action="save/" method="post">
-                            {% csrf_token %}
-                            <td><input type="checkbox" value="{{t.id}}" name="checks"></td>
-                            <td>
-                                <select class="sel_t_operation" name="operation">
-                                    {% for i in Dictionaries.all_operations %}
-                                        {% if i == t.operation_type %}
-                                            <option selected value="{{i}}">{{i}}</option>
-                                        {% else %}
-                                            <option value="{{i}}">{{i}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td>
-                                <select class="sel_t_attribute" name="attribute" onchange="location.href='?attribute='+value;">
-                                    {% for i in Dictionaries.all_attributes %}
-                                        {% check_attribute i type1 type2 as check_attr %}
-                                        {% if check_attr %}
-                                            
-                                            <option value="{{i}}" {% if attribute_temp == i %} selected="selected" {% endif %} >{{i}}</option>
-                                            
-
-                                        {% endif %} 
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td>
-                                <select class="sel_t_operator" name="operator">
-                                    {% if attribute_temp %}
-                                        {% choose_operators attribute_temp as op %}
-                                        {% for i in op %}
-                                        {% if i == t.operator %}
-                                            <option selected value="{{i}}">{{i}}</option>
-                                            {% else %}
-                                            <option value="{{i}}">{{i}}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %} 
-                                </select>
-                            </td>
-                            <td>
-                                <select class="sel_t_value" name="value" {% if t.operator == 'in' or t.operator == 'not in' %} multiple size=3 {% endif %} >
-                                    {% make_values_list t.value as list_value %}
-                                    {% if attribute_temp %}
-                                        {% choose_values attribute_temp type1 type2 as val %}
-                                        {% for i in val %}
-                                            {% if i in list_value %}
+                                {% csrf_token %}
+                                <td><input type="checkbox" value="{{t.id}}" name="checks"></td>
+                                <td>
+                                    <select class="sel_t_operation" name="operation">
+                                        {% for i in Dictionaries.all_operations %}
+                                            {% if i == t.operation_type %}
                                                 <option selected value="{{i}}">{{i}}</option>
                                             {% else %}
                                                 <option value="{{i}}">{{i}}</option>
                                             {% endif %}
                                         {% endfor %}
-                                    {% endif %} 
-                                </select>
-                            </td>
-                            <td><input type="submit" class="submit_button" value="Сохранить"></td>
-                        </form>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="sel_t_attribute" name="attribute" onchange="location.href='?attribute='+value;">
+                                        {% for i in Dictionaries.all_attributes %}
+                                            {% check_attribute i type1 type2 as check_attr %}
+                                            {% if check_attr %}
+                                                
+                                                <option value="{{i}}" {% if attribute_temp == i %} selected="selected" {% endif %} >{{i}}</option>
+                                                
+
+                                            {% endif %} 
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="sel_t_operator" name="operator">
+                                        {% if attribute_temp %}
+                                            {% choose_operators attribute_temp as op %}
+                                            {% for i in op %}
+                                            {% if i == t.operator %}
+                                                <option selected value="{{i}}">{{i}}</option>
+                                                {% else %}
+                                                <option value="{{i}}">{{i}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %} 
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="sel_t_value" name="value" {% if t.operator == 'in' or t.operator == 'not in' %} multiple size=3 {% endif %} >
+                                        {% make_values_list t.value as list_value %}
+                                        {% if attribute_temp %}
+                                            {% choose_values attribute_temp type1 type2 as val %}
+                                            {% for i in val %}
+                                                {% if i in list_value %}
+                                                    <option selected value="{{i}}">{{i}}</option>
+                                                {% else %}
+                                                    <option value="{{i}}">{{i}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %} 
+                                    </select>
+                                </td>
+                                <td><input type="submit" class="submit_button" value="Сохранить"></td>
+                            </form>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -104,8 +104,8 @@
     </table>
     <br><br>
     <div class="back">
-    <form action="back/">
-        <input type="submit" class="submit_button" class="back" value="Отмена">
-    </form>
-</div>
+        <form action="back/">
+            <input type="submit" class="submit_button" class="back" value="Отмена">
+        </form>
+    </div>
 {% endblock %}

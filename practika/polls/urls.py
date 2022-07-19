@@ -6,6 +6,7 @@ from . import views
 app_name = 'polls'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('back/', views.index, name='index'),
     path('<int:rule_id>/', views.detail, name='detail'),
     # path('sort/<slug:sort_type>/', views.search, name='search'),
     path('delete/', views.delete),

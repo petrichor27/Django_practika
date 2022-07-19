@@ -3,19 +3,17 @@ from django.shortcuts import render, redirect
 from .models import Rule, Task, Dictionaries
 
 def index(request):
-    # search = request.GET.get('search', None)
-    # if search:
-    #     search, value = search.split(',')
-    #     print(search)
-    #     print(value.lower())
-    #     try:
-    #         if search == 'name':
-    #             rule = Rule.objects.get(name = value)
-    #         elif search == 'queue':
-    #             rule = Rule.objects.get(queue = value)
-    #         return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries})
-    #     except:
-    #         raise Http404("Правило не найдено")
+    search = request.GET.get('search', None)
+    if search and ',' in search:
+        search, value = search.split(',')
+
+        if search == 'name':
+            rule = Rule.objects.filter(name = value)
+        elif search == 'queue':
+            rule = Rule.objects.filter(queue = value)
+            rule |= Rule.objects.filter(queue = 'Очередь '+str(value))
+        return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries, 'search': True})
+
 
   
     sort_type = request.GET.get('sort', None)
@@ -23,7 +21,7 @@ def index(request):
         rule_list = Rule.objects.order_by(sort_type)
     else:
         rule_list = Rule.objects.all()
-    return render(request,'polls/list.html', {'rule_list': rule_list, 'Dictionaries': Dictionaries})
+    return render(request,'polls/list.html', {'rule_list': rule_list, 'Dictionaries': Dictionaries, 'search': False})
 
 def detail(request, rule_id):
     try:

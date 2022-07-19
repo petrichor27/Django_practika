@@ -1,10 +1,10 @@
 from django.db import models
-import csv
+import csv, os
 
 class Value_for_type123(models.Model):
     def __init__(self):
         self.values_list = []
-        self.read_types('C:\\Users\\Елизавета\\Documents\\GitHub\\Django_practika\\practika\\polls\\Типы заданий.csv')
+        self.read_types(os.getcwd() + '\\polls\\Типы заданий.csv')
 
     def read_types(self,file):  
         with open(file, newline='') as csvfile:
