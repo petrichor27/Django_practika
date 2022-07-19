@@ -20,10 +20,10 @@ body {
 #t_value_new, #t_attribute_new {
     width: 25em;
 }
-.sel_rule_queue, .inp_rule_name, #t_operator_new {
+.sel_rule_queue, .inp_rule_name, #t_operator_new, #t_operation {
     width: 8em;
 }
-.inp_rule_range, #t_operation {
+.inp_rule_range {
     width: 5em;
 }
 .back {
@@ -51,11 +51,12 @@ select {
     border: 1px solid #bdbdbd;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    height: 1.8rem;
+    /*height: 1.8rem;*/
     width: 60%;
+    min-height: 1.8rem;
 }
-#t_value_new {
-    height: 3.8rem;
+.sel_t_value {
+    /*height: 3.8rem;*/
 }
 .submit_button {
     font-family: inherit;

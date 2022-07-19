@@ -28,7 +28,12 @@
                             <td><p>{{t.operation_type}}</p></td>
                             <td><p>{{t.attribute}}</p></td>
                             <td><p>{{t.operator}}</p></td>
-                            <td><p>{{t.value}}</p></td>
+                            <td>
+                                {% make_values_list t.value as list_value %}
+                                {% for i in list_value %}
+                                    <p>{{i}}</p>
+                                {% endfor %}
+                            </td>
                             <td><a class="a_button" href="update/{{t.id}}">Изменить</a></td>                       
                         </tr>
                     {% else %}
@@ -75,11 +80,12 @@
                                 </select>
                             </td>
                             <td>
-                                <select id="sel_t_value" name="value">
+                                <select class="sel_t_value" name="value" {% if t.operator == 'in' or t.operator == 'not in' %} multiple size=3 {% endif %} >
+                                    {% make_values_list t.value as list_value %}
                                     {% if attribute_temp %}
                                         {% choose_values attribute_temp type1 type2 as val %}
                                         {% for i in val %}
-                                            {% if i == t.value %}
+                                            {% if i in list_value %}
                                                 <option selected value="{{i}}">{{i}}</option>
                                             {% else %}
                                                 <option value="{{i}}">{{i}}</option>

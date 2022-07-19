@@ -35,3 +35,22 @@ def check_list(arg):
         return True
     print('f')
     return False
+
+@register.simple_tag()
+def make_values_list(arg):
+    if arg[0] == '[':
+        arg1 = arg.replace('[','')
+        arg1 = arg1.replace(']','')
+        arg1 = arg1.replace("'",'')
+        res = []
+        t = ''
+        for i in range(len(arg1)):
+            if arg1[i] != ',':
+                if arg1[i] != ' ':
+                    t += arg1[i]
+            else:
+                res.append(t)
+                t = ''
+        res.append(t)
+        return res
+    else: return [arg]

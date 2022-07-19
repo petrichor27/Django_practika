@@ -32,9 +32,9 @@ def detail(request, rule_id):
 
         sort_type = request.GET.get('sort', None)
         if sort_type:
-            task = Task.objects.order_by(sort_type)
-        else:
-            task = Task.objects.all()
+            task = task.order_by(sort_type)
+        # else:
+        #     task = Task.objects.all()
 
         new_t = request.GET.get('new', None)
         new_attr = None
@@ -59,6 +59,12 @@ def detail(request, rule_id):
                 type1_attribute = i.value
             elif i.attribute == 'Тип задания 2':
                 type2_attribute = i.value
+        
+        # for i in task:
+        #     if i.value[0] == '[':
+        #         i.value = i.value.replace('[','')
+        #         i.value = i.value.replace(']','')
+        #         i.value = i.value.replace("'",'')
 
     except:
         raise Http404("Правило не найдено")
@@ -127,7 +133,7 @@ def save_update2(request, rule_id, task_id):
         task.operation_type = request.POST.get("operation")
         task.attribute = request.POST.get("attribute")
         task.operator = request.POST.get("operator")
-        task.value = request.POST.get("value")
+        task.value =  str(request.POST.getlist("value"))
         task.save()
     # rule_list = Rule.objects.order_by('name')
     return HttpResponseRedirect("/polls/"+str(rule_id)+"/")

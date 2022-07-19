@@ -29,9 +29,10 @@
                         <td><p>{{t.attribute}}</p></td>
                         <td><p>{{t.operator}}</p></td>
                         <td>
-                            
-                            <p>{{t.value}}</p>
-                            
+                            {% make_values_list t.value as list_value %}
+                            {% for i in list_value %}
+                                <p>{{i}}</p>
+                            {% endfor %}
                         </td>
                             
                         <td><a class="a_button" href="update/{{t.id}}">Изменить</a></td>                       
@@ -69,15 +70,13 @@
                         {% if attribute_temp %}
                             {% choose_operators attribute_temp as op %}
                             {% for i in op %}
-                            
                                 <option value="{{i}}" {% if new_op == i %} selected="selected" {% endif %}>{{i}}</option>
-                            
                             {% endfor %}
                         {% endif %} 
                    </select> 
                 </td>
                 <td>
-                    <select id="t_value_new" name="value_new" {% if new_op == 'in' or new_op == 'not in' %} multiple size=3 {% endif %} >
+                    <select class="sel_t_value" name="value_new" {% if new_op == 'in' or new_op == 'not in' %} multiple size=3 {% endif %} >
                         <option value="">Не выбрано</option>
                         {% if attribute_temp %}
                             {% choose_values attribute_temp type1 type2 as val %}
