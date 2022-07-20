@@ -4,15 +4,14 @@ from .models import Rule, Task, Dictionaries
 
 def index(request):
     search = request.GET.get('search', None)
-    if search and ',' in search:
-        search, value = search.split(',')
-
-        if search == 'name':
-            rule = Rule.objects.filter(name = value)
-        elif search == 'queue':
-            rule = Rule.objects.filter(queue = value)
-            rule |= Rule.objects.filter(queue = 'Очередь '+str(value))
-        return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries, 'search': True})
+    search_text = request.GET.get('text', None)
+   
+    if search == 'name':
+        rule = Rule.objects.filter(name = search_text)
+    elif search == 'queue':
+        rule = Rule.objects.filter(queue = search_text)
+        rule |= Rule.objects.filter(queue = 'Очередь '+str(search_text))
+    return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries, 'search': True})
 
 
   
@@ -31,25 +30,11 @@ def detail(request, rule_id):
         sort_type = request.GET.get('sort', None)
         if sort_type:
             task = task.order_by(sort_type)
-        # else:
-        #     task = Task.objects.all()
-
-        new_t = request.GET.get('new', None)
-        new_attr = None
-        new_op = None
-        new_t_op = None
-        if new_t:
-            new_t = new_t[:-1]
-            
-            if ',' in new_t:
-                new_t_op = new_t.split(',')
-                if len(new_t_op)>1:
-                    new_attr = new_t_op[1]
-                if len(new_t_op)>2:
-                    new_op = new_t_op[2]
-                new_t_op = new_t_op[0]
-            else:
-                new_t_op = new_t
+        
+        new_operation = request.GET.get('operation', None)
+        new_attribute = request.GET.get('attribute', None)
+        new_operator = request.GET.get('operator', None)
+        
         type1_attribute = None
         type2_attribute = None
         for i in task:
@@ -67,8 +52,8 @@ def detail(request, rule_id):
     except:
         raise Http404("Правило не найдено")
     return render(request, 'polls/detail.html', {'rule': rule.name, 'task': task, 'Dictionaries': Dictionaries, 
-                                                'attribute_temp': new_attr, 'type1': type1_attribute, 
-                                                'type2':type2_attribute, 'new_op': new_op, 'new_t_op': new_t_op})
+                                                'attribute_temp': new_attribute, 'type1': type1_attribute, 
+                                                'type2':type2_attribute, 'new_operation': new_operation, 'new_operator': new_operator})
 
 def add(request):
     if request.method == "POST":
@@ -121,7 +106,6 @@ def update2(request, rule_id, task_id):
         elif i.attribute == 'Тип задания 2':
             type2_attribute = i.value
     attribute2 = request.GET.get('attribute', upd_task[0].attribute)
-    # print()
     return render(request,'polls/detail_upd.html', {'rule': rule.name, 'task': task, 'Dictionaries': Dictionaries, 'attribute_temp': attribute2, 
                                                 'type1': type1_attribute, 'type2': type2_attribute, 'id_to_update': task_id})
     
@@ -133,15 +117,17 @@ def save_update2(request, rule_id, task_id):
         task.operator = request.POST.get("operator")
         task.value =  str(request.POST.getlist("value"))
         task.save()
-    # rule_list = Rule.objects.order_by('name')
     return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
 
 
 def delete(request):
+    print(request)
     try:
         if request.method == "POST":
             rule_del = request.POST.getlist('checks')
+
             for i in rule_del:
+
                 Rule.objects.filter(id=i).delete()
         return HttpResponseRedirect("/polls/")
     except Rule.DoesNotExist:

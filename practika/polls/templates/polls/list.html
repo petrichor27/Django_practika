@@ -13,9 +13,9 @@
             <option value="queue" {% if request.GET.search == "queue" %} selected="selected" {% endif %}>Поиск по очереди</option>
         </select>
         <p>&emsp;&emsp;</p> 
-        <input type="text" class="inp_search" onchange="location.href=location.href+','+value;"/>
+        <input type="text" class="inp_search" onchange="location.href+='&text='+value;"/>
     </div>
-    
+
     <table class="table">
         <form action="delete/" method="post">
             {% csrf_token %}
@@ -28,7 +28,7 @@
                     <th></th>
                 </tr>
             </thead>
-
+        
             {% if rule_list %}
                 {% for a in rule_list %}
                     <tr class="row">
@@ -58,13 +58,7 @@
                 <td><input type="submit" class="submit_button" value="Сохранить"></td>  
             </tr>
         </form>
-    </table>    
-    {% if search %}
-     <br><br>
-        <div class="back">
-            <form action="back/">
-                <input type="submit" class="submit_button" class="back" value="На главную">
-            </form>
-        </div>
-    {% endif %}
+        
+    </table>
+
 {% endblock %}

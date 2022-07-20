@@ -45,15 +45,15 @@
             <tr class="row">
                 <td></td>
                 <td>
-                    <select id="t_operation" name="operation_new" onchange="location.href='?new='+value+',';">
+                    <select id="t_operation" name="operation_new" onchange="location.href='?operation='+value+'&';">
                         <option value="">Не выбрано</option>
                         {% for i in Dictionaries.all_operations %}
-                            <option value="{{i}}" {% if new_t_op == i %} selected="selected" {% endif %}>{{i}}</option>
+                            <option value="{{i}}" {% if new_operation == i %} selected="selected" {% endif %}>{{i}}</option>
                         {% endfor %}
                     </select>
                 </td>
                 <td>
-                    <select id="t_attribute_new" name="attribute_new" onchange="location.href=location.href+value+',';">
+                    <select id="t_attribute_new" name="attribute_new" onchange="location.href+='attribute='+value+'&';">
                         <option value="">Не выбрано</option>
                         {% for i in Dictionaries.all_attributes %}
                             {% check_attribute i type1 type2 as check_attr %}
@@ -64,12 +64,12 @@
                     </select>
                 </td>
                 <td>
-                    <select id="t_operator_new" name="operator_new" onchange="location.href=location.href+value+',';">
+                    <select id="t_operator_new" name="operator_new" onchange="location.href+='operator='+value;">
                         <option value="">Не выбрано</option>
                         {% if attribute_temp %}
                             {% choose_operators attribute_temp as op %}
                             {% for i in op %}
-                                <option value="{{i}}" {% if new_op == i %} selected="selected" {% endif %}>{{i}}</option>
+                                <option value="{{i}}" {% if new_operator == i %} selected="selected" {% endif %}>{{i}}</option>
                             {% endfor %}
                         {% endif %} 
                    </select> 
@@ -77,8 +77,8 @@
                 <td>
                     {% if attribute_temp %}
                         {% choose_values attribute_temp type1 type2 as val %}
-                        {% if val and new_op != 'like' and new_op != 'not like' %}
-                            <select class="sel_t_value" name="value_new" {% if new_op == 'in' or new_op == 'not in' %} multiple size=3 {% endif %} >
+                        {% if val and new_operator != 'like' and new_operator != 'not like' %}
+                            <select class="sel_t_value" name="value_new" {% if new_operator == 'in' or new_operator == 'not in' %} multiple size=3 {% endif %} >
                                 <option value="">Не выбрано</option>
                                     {% for i in val %}
                                         <option value="{{i}}">{{i}}</option>
