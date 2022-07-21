@@ -1,7 +1,7 @@
-from django.db import models
+from django.db import models as m
 import csv, os
 
-class Value_for_type123(models.Model):
+class Value_for_type123(m.Model):
     def __init__(self):
         self.values_list = []
         self.read_types(os.getcwd() + '\\polls\\Типы заданий.csv')
@@ -35,7 +35,7 @@ class Value_for_type123(models.Model):
         return type3
 
 
-class Dictionaries(models.Model):
+class Dictionaries(m.Model):
     all_queues = ['Очередь 1','Очередь 2','Очередь 3','Очередь 4']
     all_operations = ['AND','OR']
     all_attributes = {'Тип задания 1': 'Справочник','Тип задания 2':'Справочник','Тип задания 3': 'Справочник','Тип клиента': 'Справочник',
@@ -81,14 +81,14 @@ class Dictionaries(models.Model):
         else: return None
 
 
-class Rule(models.Model):
-    name = models.CharField('Название', max_length = 200)
-    queue = models.CharField('Очередь', max_length = 200, choices = [(i,i) for i in Dictionaries.all_queues], default = '-')
-    rule_range = models.IntegerField('Ранг',unique=True)
-    creator = models.CharField('Пользователь, который создал правило', max_length = 20)
-    updator = models.CharField('Пользователь, который последним изменил правило', max_length = 20)
-    create_date = models.DateTimeField('Дата создания правила', auto_now=False, auto_now_add=True)
-    update_date = models.DateTimeField('Дата последнего изменения правила',auto_now=True, auto_now_add=False)
+class Rule(m.Model):
+    name = m.CharField('Название', max_length = 200)
+    queue = m.CharField('Очередь', max_length = 200, choices = [(i,i) for i in Dictionaries.all_queues], default = '-')
+    rule_range = m.IntegerField('Ранг',unique=True)
+    creator = m.CharField('Пользователь, который создал правило', max_length = 20)
+    updator = m.CharField('Пользователь, который последним изменил правило', max_length = 20)
+    create_date = m.DateTimeField('Дата создания правила', auto_now=False, auto_now_add=True)
+    update_date = m.DateTimeField('Дата последнего изменения правила',auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return self.name
@@ -99,12 +99,12 @@ class Rule(models.Model):
 
 
 
-class Task(models.Model):
-    rule = models.ForeignKey(Rule, on_delete = models.CASCADE, verbose_name="Правило")
-    operation_type = models.CharField('Тип', max_length = 5, choices = [(i,i) for i in Dictionaries.all_operations], default = '-')
-    attribute = models.CharField('Атрибут', max_length = 200, choices = [(i[0],i[0]) for i in list(Dictionaries.all_attributes.items())], default = '-')
-    operator = models.CharField('Оператор', max_length = 200, choices = [(i,i) for i in Dictionaries.all_operators], default = '-')
-    value = models.CharField('Значение', max_length = 200)
+class Task(m.Model):
+    rule = m.ForeignKey(Rule, on_delete = m.CASCADE, verbose_name="Правило")
+    operation_type = m.CharField('Тип', max_length = 5, choices = [(i,i) for i in Dictionaries.all_operations], default = '-')
+    attribute = m.CharField('Атрибут', max_length = 200, choices = [(i[0],i[0]) for i in list(Dictionaries.all_attributes.items())], default = '-')
+    operator = m.CharField('Оператор', max_length = 200, choices = [(i,i) for i in Dictionaries.all_operators], default = '-')
+    value = m.CharField('Значение', max_length = 200)
 
     def __str__(self):
         return self.operation_type + " " + self.attribute + " " + self.operator + " " + self.value
