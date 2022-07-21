@@ -1,4 +1,5 @@
-from django.db import models
+from django.db import models  # REVIEW: здесь можно добавить: ...import models as m
+# чтобы в коде ниже меньше места занимало
 import csv, os
 
 class Value_for_type123(models.Model):
