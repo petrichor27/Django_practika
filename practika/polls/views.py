@@ -15,7 +15,7 @@ def index(request):
 
 
   
-    sort_type = request.GET.get('sort', None)
+    sort_type = request.GET.get('sort', None)  # REVIEW: код после безусловного ретёрна ( никогда не будет достигнут)
     if sort_type:
         rule_list = Rule.objects.order_by(sort_type)
     else:
@@ -147,5 +147,6 @@ def delete2(request,rule_id):
 def back(request,rule_id):
     return HttpResponseRedirect("/polls/")
 
-def back2(request,rule_id,task_id):
+def back2(request,rule_id,task_id):  # REVIEW: если она (и delete2) используется, то стоит подумать,
+    # как лучше отделить названием от таковой, но без цифры "2". То есть, детальнее описать смысл существования второй.
     return HttpResponseRedirect("/polls/"+str(rule_id)+"/")
