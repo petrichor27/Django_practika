@@ -5,13 +5,13 @@ from .models import Rule, Task, Dictionaries
 def index(request):
     search = request.GET.get('search', None)
     search_text = request.GET.get('text', None)
-   
-    if search == 'name':
-        rule = Rule.objects.filter(name = search_text)
-    elif search == 'queue':
-        rule = Rule.objects.filter(queue = search_text)
-        rule |= Rule.objects.filter(queue = 'Очередь '+str(search_text))
-    return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries, 'search': True})
+    if search and search_text:
+        if search == 'name':
+            rule = Rule.objects.filter(name = search_text)
+        elif search == 'queue':
+            rule = Rule.objects.filter(queue = search_text)
+            rule |= Rule.objects.filter(queue = 'Очередь '+str(search_text))
+        return render(request,'polls/list.html', {'rule_list': rule, 'Dictionaries': Dictionaries, 'search': True})
 
 
   
