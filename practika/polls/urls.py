@@ -18,5 +18,5 @@ urlpatterns = [
     path('update/<int:rule_id>/save/', views.save_update),
     path('<int:rule_id>/update/<int:task_id>/', views.update_for_task_table, name='detail_upd'),
     path('<int:rule_id>/update/<int:task_id>/save/', views.save_update_for_task_table),
-    path('<int:rule_id>/update/<int:task_id>/back/', views.back2)
+    path('<int:rule_id>/update/<int:task_id>/back/', views.back_for_task_table)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
